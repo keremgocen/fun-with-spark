@@ -14,6 +14,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 import static spark.Spark.get;
@@ -38,36 +40,9 @@ public class Xdaw {
         ExtApi.PurchasesByUserService purchasesByUserService = retrofit.create(ExtApi.PurchasesByUserService.class);
         ExtApi.PurchasesByProductService purchasesByProductService = retrofit.create(ExtApi.PurchasesByProductService.class);
         ExtApi.ProductsByIdService productsByIdService = retrofit.create(ExtApi.ProductsByIdService.class);
-        /*try {
-            Call<PurchaseList> purchaseListCall = purchasesByUserService.listPurchases("Misael_Hilpert");
-
-            Response<PurchaseList> resp1 = purchaseListCall.execute();
 
 
-            for (Purchase p1 : resp1.body().getPurchases()) {
-                System.out.println(p1);
-
-                Call<PurchaseList> productPurchases = purchasesByProductService.listPurchases(p1.getProductId());
-                Response<PurchaseList> resp2 = productPurchases.execute();
-
-                for(Purchase p2 : resp2.body().getPurchases()) {
-                    System.out.println(p2);
-
-                    Call<ProductWrapper> productsById = productsByIdService.getProductWrapper(p2.getProductId());
-                    Response<ProductWrapper> productsResponse = productsById.execute();
-
-                    System.out.println(productsResponse.isSuccessful());
-                    System.out.println(productsResponse.body().getProduct());
-                    System.out.println(productsResponse.message());
-                }
-
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
-
-        Callback<ProductWrapper> productCallback = new Callback<ProductWrapper>() {
+        /*Callback<ProductWrapper> productCallback = new Callback<ProductWrapper>() {
             @Override
             public void onResponse(Call<ProductWrapper> call, Response<ProductWrapper> response) {
                 System.out.println("product recevied:" + response.body().getProduct());
@@ -99,17 +74,74 @@ public class Xdaw {
                 System.out.println("purchaseListCall failed" + throwable.getMessage());
                 System.out.println("purchaseListCall request was:" + call.request().toString());
             }
-        };
+        };*/
 
         port(8080);
 
         get("/api/recent_purchases/:username", (req, res) -> {
+/*
+            Call<PurchaseList> purchaseListCall = purchasesByUserService.listPurchases(req.params(":username"));
+            purchaseListCall.enqueue(purchaseListCallback);
+*/
+            List<Result> resultList = new ArrayList<Result>();
+
 
             Call<PurchaseList> purchaseListCall = purchasesByUserService.listPurchases(req.params(":username"));
 
-            purchaseListCall.enqueue(purchaseListCallback);
+            Response<PurchaseList> resp1 = purchaseListCall.execute();
 
-            return "Hello: " + req.params(":username");
+            for (Purchase p1 : resp1.body().getPurchases()) {
+                System.out.println("p1:" + p1);
+
+                Result r1 = new Result();
+                ArrayList<String> recent = new ArrayList<String>();
+
+                Call<PurchaseList> productPurchases = purchasesByProductService.listPurchases(p1.getProductId());
+                Response<PurchaseList> resp2 = productPurchases.execute();
+
+                for(Purchase p2 : resp2.body().getPurchases()) {
+                    System.out.println("p2" + p2);
+
+                    recent.add(p2.getUsername());
+
+                    Call<ProductWrapper> productsById = productsByIdService.getProductWrapper(p2.getProductId());
+                    Response<ProductWrapper> productResponse = productsById.execute();
+
+                    System.out.println(productResponse.isSuccessful());
+                    System.out.println(productResponse.body().getProduct());
+                    System.out.println(productResponse.message());
+
+                    Product newP = productResponse.body().getProduct();
+
+                    r1.setFace(newP.getFace());
+                    r1.setId(newP.getId());
+                    r1.setPrice(newP.getPrice());
+                    r1.setSize(newP.getSize());
+
+
+                }
+                r1.setRecent(recent);
+                resultList.add(r1);
+
+            }
+
+            System.out.println(resultList);
+
+
+
+            /*res.body();               // get response content
+            response.body("Hello");        // sets content to Hello
+            response.header("FOO", "bar"); // sets header FOO with value bar
+            response.raw();                // raw response handed in by Jetty
+            response.redirect("/example"); // browser redirect to /example
+            response.status();             // get the response status
+            response.status(401);          // set status code to 401
+            response.type();               // get the content type
+            response.type("text/xml");     // set content type to text/xml
+
+*/
+
+            return "Getting results for user: " + req.params(":username");
         });
 
 /*        DataModel model = new DataModel();*/
