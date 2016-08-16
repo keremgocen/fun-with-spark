@@ -2,7 +2,7 @@ package models;
 
 import lombok.Data;
 
-import java.util.List;
+import java.util.HashSet;
 
 /**
  * Created by kerem on 8/16/16.
@@ -13,7 +13,7 @@ public class Result {
     private String face;
     private int size;
     private int price;
-    private List<String> recent;
+    private HashSet<String> recent;
 
     @Override
     public String toString() {

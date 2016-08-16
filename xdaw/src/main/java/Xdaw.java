@@ -15,7 +15,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import static spark.Spark.get;
@@ -94,7 +96,7 @@ public class Xdaw {
                 System.out.println("p1:" + p1);
 
                 Result r1 = new Result();
-                ArrayList<String> recent = new ArrayList<String>();
+                HashSet<String> recent = new HashSet<String>();
 
                 Call<PurchaseList> productPurchases = purchasesByProductService.listPurchases(p1.getProductId());
                 Response<PurchaseList> resp2 = productPurchases.execute();
@@ -141,8 +143,8 @@ public class Xdaw {
 
 */
 
-            return "Getting results for user: " + req.params(":username");
-        });
+            return resultList;
+        }, new JsonTransformer());
 
 /*        DataModel model = new DataModel();*/
 
