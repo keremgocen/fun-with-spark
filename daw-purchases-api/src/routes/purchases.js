@@ -15,6 +15,8 @@ module.exports = function (router, store) {
         return p.username === username
       })
 
+      res.setHeader('Cache-Control', 'max-age=60')
+
       sendJson(req, res, {
         purchases: found.slice(skip, limit + skip)
       })

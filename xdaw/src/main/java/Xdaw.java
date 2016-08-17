@@ -4,7 +4,6 @@
 
 import models.*;
 import okhttp3.Cache;
-import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import org.eclipse.jetty.util.ConcurrentHashSet;
@@ -15,7 +14,6 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.HashSet;
 
 import static spark.Spark.get;
@@ -23,10 +21,11 @@ import static spark.Spark.port;
 
 public class Xdaw {
 
-    private static final int LISTEN_PORT = 8080;
+    private static final int LISTEN_PORT = 8000;
     private static final int HTTP_BAD_REQUEST = 400;
     private static final int USERS_GET_LIMIT = 10;
     private static final int PURCHASE_GET_LIMIT = 5;
+    private static final String CACHE_CONTROL_MAX_AGE = "60";
 
     public static void main(String[] args) {
 
@@ -38,7 +37,7 @@ public class Xdaw {
         OkHttpClient client = new OkHttpClient.Builder().cache(cache) // 10 MB
                 .addInterceptor(chain -> {
                     Request request = chain.request();
-                    request = request.newBuilder().header("Cache-Control", "public, max-age=" + 60).build();
+                    request = request.newBuilder().header("Cache-Control", "max-age="+CACHE_CONTROL_MAX_AGE).build();
                     return chain.proceed(request);
                 })
                 .build();
@@ -60,7 +59,9 @@ public class Xdaw {
             public void onResponse(Call<UserList> call, Response<UserList> response) {
                 UserList userList = response.body();
 
-                if (userList.getUsers() != null && !userList.getUsers().isEmpty())
+                System.out.println("response headers:" + response.headers().toString());
+
+                if (userList != null && userList.getUsers() != null && !userList.getUsers().isEmpty())
                     for (User u : userList.getUsers()) {
                         System.out.println(u);
                         userHashSet.add(u.getUsername());
@@ -86,7 +87,6 @@ public class Xdaw {
             // check if user exists
             String username = req.params(":username");
 
-            // TODO check users
             if (!userHashSet.contains(username)) {
                 Call<User> userCall = userByNameService.getUser(username);
                 Response<User> userResponse = userCall.execute();
