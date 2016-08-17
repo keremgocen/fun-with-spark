@@ -1,0 +1,11 @@
+http://74.50.59.155:6000/api/products/569294
+GET
+0
+HTTP/1.1 200 OK
+6
+content-type: application/json
+content-length: 67
+Date: Wed, 17 Aug 2016 00:02:19 GMT
+Connection: keep-alive
+OkHttp-Sent-Millis: 1471392139454
+OkHttp-Received-Millis: 1471392139706

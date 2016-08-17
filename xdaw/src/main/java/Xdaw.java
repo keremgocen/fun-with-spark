@@ -3,6 +3,10 @@
  */
 
 import models.*;
+import okhttp3.Cache;
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import org.eclipse.jetty.util.ConcurrentHashSet;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -10,6 +14,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashSet;
 
 import static spark.Spark.get;
@@ -26,7 +32,14 @@ public class Xdaw {
 
         ConcurrentHashSet<String> userHashSet = new ConcurrentHashSet<>();
 
+       /*client.networkInterceptors().add(REWRITE_CACHE_CONTROL_INTERCEPTOR);*/
+        File httpCacheDirectory = new File("responses");
+        int cacheSize = 10 * 1024 * 1024; // 10 MiB
+        Cache cache = new Cache(httpCacheDirectory, cacheSize);
+        OkHttpClient client = new OkHttpClient.Builder().cache(cache).build();
+
         Retrofit retrofit = new Retrofit.Builder()
+                .client(client)
                 .baseUrl(ExtApi.TARGET_URL_BASE)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
@@ -131,7 +144,7 @@ public class Xdaw {
 
    /* interface Validable {
         boolean isValid();
-    }*/
+    }
 
     // used json transformer instead
     /*public static String dataToJson(Object data) {
