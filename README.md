@@ -3,10 +3,13 @@ Java Spark Rest API example with Retrofit/Lombok and OkHttp as request cache
 
 ### Compile/Run via IntelliJ
 #### Dependencies
+
 - [Java 8 SDK](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
 - [IntelliJ Community Edition](https://www.jetbrains.com/idea/download/)
  - Tested on version 2016.2.1
+ 
 ##### Maven Dependencies
+
 (this should be handled via IntelliJ, automatically)
 - spark-core - Lightweight REST framefork
 - slf4j-simple - Spark dependency
@@ -24,7 +27,7 @@ This behavior can be changed by modifying ```TARGET_URL_BASE``` constant in [Ext
 #### Response Caching
 Response caching is achieved via OkHttp client and response headers from daw-api. Cache duration can be modified via "max-age=" parameter. 
 
->> "max-age=60" # evict responses after 60 seconds
+> "max-age=60" # evict responses after 60 seconds
 
 See [Caching in HTTP](https://www.w3.org/Protocols/rfc2616/rfc2616-sec13.html) for more info.
 
