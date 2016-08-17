@@ -8,7 +8,7 @@ import retrofit2.http.*;
  */
 public class ExtApi {
 
-    public static final String TARGET_URL_BASE = "http://localhost:8000/api/";
+    public static final String TARGET_URL_BASE = "http://localhost:8080/api/";
 
     public interface PurchasesByUserService {
         @GET("purchases/by_user/{user}")

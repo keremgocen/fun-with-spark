@@ -12,6 +12,8 @@ module.exports = function (router, store) {
       var limit = parseInt(query.limit, 10) || 10
       var skip = parseInt(query.skip, 10) || 0
 
+      res.setHeader('Cache-Control', 'max-age=60')
+
       sendJson(req, res, {
         products: products.slice(skip, limit + skip)
       })
@@ -25,6 +27,8 @@ module.exports = function (router, store) {
       var found = find(products, function (p) {
         return p.id === id
       })
+
+      res.setHeader('Cache-Control', 'max-age=60')
 
       sendJson(req, res, {
         product: found

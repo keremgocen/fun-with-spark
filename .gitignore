@@ -56,6 +56,5 @@ crashlytics.properties
 crashlytics-build.properties
 fabric.properties
 
-xdaw/.idea/vcs.xml
-
-xdaw/.idea/workspace.xml
+*/rcache/*
+*/.DS_Store

@@ -4,7 +4,7 @@ var http = require('http')
 var Router = require('http-hash-router')
 var path = require('path')
 
-var port = process.env.PORT || 8000
+var port = process.env.PORT || 8080
 var router = new Router()
 
 var store = require('./src/setup-store')(path.join(__dirname, '.data'))
@@ -29,7 +29,18 @@ require('./src/routes/purchases')(router, store)
 require('./src/routes/users')(router, store)
 
 // ----
+// graceful shutdown
+process.on('SIGINT', function () {
+  server.close(function () {
+ 	console.log('\nshutting down server...')
+    process.exit(0);
+  });
+});
+
+// ----
 // start the server
 
 server.listen(port)
 console.log('ready on http://0.0.0.0:%d', port)
+
+

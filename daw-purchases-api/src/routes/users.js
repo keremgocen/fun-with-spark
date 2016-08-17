@@ -12,6 +12,8 @@ module.exports = function (router, store) {
       var limit = parseInt(query.limit, 10) || 10
       var skip = parseInt(query.skip, 10) || 0
 
+      res.setHeader('Cache-Control', 'max-age=60')
+
       sendJson(req, res, {
         users: users.slice(skip, limit + skip)
       })
