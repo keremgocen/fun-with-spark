@@ -32,11 +32,16 @@ public class Xdaw {
 
         ConcurrentHashSet<String> userHashSet = new ConcurrentHashSet<>();
 
-       /*client.networkInterceptors().add(REWRITE_CACHE_CONTROL_INTERCEPTOR);*/
-        File httpCacheDirectory = new File("responses");
+        File httpCacheDirectory = new File("rcache");
         int cacheSize = 10 * 1024 * 1024; // 10 MiB
         Cache cache = new Cache(httpCacheDirectory, cacheSize);
-        OkHttpClient client = new OkHttpClient.Builder().cache(cache).build();
+        OkHttpClient client = new OkHttpClient.Builder().cache(cache) // 10 MB
+                .addInterceptor(chain -> {
+                    Request request = chain.request();
+                    request = request.newBuilder().header("Cache-Control", "public, max-age=" + 60).build();
+                    return chain.proceed(request);
+                })
+                .build();
 
         Retrofit retrofit = new Retrofit.Builder()
                 .client(client)
