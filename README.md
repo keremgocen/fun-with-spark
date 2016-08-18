@@ -11,7 +11,7 @@ Java Spark Rest API example with Retrofit/Lombok and OkHttp as request cache
 ##### Maven Dependencies
 
 (this should be handled via IntelliJ, automatically)
-- spark-core - Lightweight REST framefork
+- [spark](http://sparkjava.com/)-core - Lightweight REST framefork
 - slf4j-simple - Spark dependency
 - lombok - Automated boilerplate getter/setters for objects
 - retrofit - Used to consume daw-api
@@ -64,3 +64,5 @@ You can run it either locally or use the external version(default).
   .
 ]
 ```
+### Usage (yes, I like low quality ffmpeg gifs)
+![woho](/demo/xdaw.gif)
