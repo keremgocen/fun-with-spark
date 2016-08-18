@@ -25,9 +25,6 @@ public class Xdaw {
 
     private static final int HTTP_BAD_REQUEST = 400;
     private static final int USERS_GET_LIMIT = 10;
-
-    public static final String TARGET_URL_BASE = "http://74.50.59.155:6000/api/";
-
     private static final int PURCHASE_GET_LIMIT = 5;
 
     public static void main(String[] args) {
@@ -44,7 +41,7 @@ public class Xdaw {
                 .addNetworkInterceptor(chain -> {
                     Request request = chain.request();
                     okhttp3.Response response = chain.proceed(request);
-                    response = response.newBuilder().header("Cache-Control", "max-age="+appSettings.getCacheControlMaxAge()).build();
+                    response = response.newBuilder().header("Cache-Control", "max-age=" + appSettings.getCacheControlMaxAge()).build();
                     return response;
                 })
                 .build();
