@@ -12,6 +12,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import util.AppSettings;
+import util.JsonTransformer;
 
 import java.io.File;
 import java.util.HashSet;
@@ -21,30 +23,35 @@ import static spark.Spark.port;
 
 public class Xdaw {
 
-    private static final int LISTEN_PORT = 8000;
     private static final int HTTP_BAD_REQUEST = 400;
     private static final int USERS_GET_LIMIT = 10;
+
+    public static final String TARGET_URL_BASE = "http://74.50.59.155:6000/api/";
+
     private static final int PURCHASE_GET_LIMIT = 5;
-    private static final String CACHE_CONTROL_MAX_AGE = "60";
 
     public static void main(String[] args) {
 
         ConcurrentHashSet<String> userHashSet = new ConcurrentHashSet<>();
 
+        AppSettings appSettings = new AppSettings();
+        appSettings.init();
+
         File httpCacheDirectory = new File("rcache");
         int cacheSize = 10 * 1024 * 1024; // 10 MiB
         Cache cache = new Cache(httpCacheDirectory, cacheSize);
         OkHttpClient client = new OkHttpClient.Builder().cache(cache) // 10 MB
-                .addInterceptor(chain -> {
+                .addNetworkInterceptor(chain -> {
                     Request request = chain.request();
-                    request = request.newBuilder().header("Cache-Control", "max-age="+CACHE_CONTROL_MAX_AGE).build();
-                    return chain.proceed(request);
+                    okhttp3.Response response = chain.proceed(request);
+                    response = response.newBuilder().header("Cache-Control", "max-age="+appSettings.getCacheControlMaxAge()).build();
+                    return response;
                 })
                 .build();
 
         Retrofit retrofit = new Retrofit.Builder()
                 .client(client)
-                .baseUrl(ExtApi.TARGET_URL_BASE)
+                .baseUrl(appSettings.getExternalBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
@@ -71,8 +78,8 @@ public class Xdaw {
 
             @Override
             public void onFailure(Call<UserList> call, Throwable throwable) {
-                System.out.println("Failed to get users. " + throwable.getMessage());
-                throwable.printStackTrace();
+                System.out.println("Failed to get users. Make sure daw-api is running and accesible..\n" + throwable.getMessage());
+                System.out.println("Failed request:" + call.request().toString());
             }
         };
 
@@ -80,7 +87,7 @@ public class Xdaw {
         Call<UserList> userListCall = usersService.getUsers(USERS_GET_LIMIT);
         userListCall.enqueue(userListCallback);
 
-        port(LISTEN_PORT);
+        port(Integer.parseInt(appSettings.getListenPort()));
 
         get("/api/recent_purchases/:username", (req, res) -> {
 
@@ -146,22 +153,5 @@ public class Xdaw {
         }, new JsonTransformer());
 
     }
-
-   /* interface Validable {
-        boolean isValid();
-    }
-
-    // used json transformer instead
-    /*public static String dataToJson(Object data) {
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            mapper.enable(SerializationFeature.INDENT_OUTPUT);
-            StringWriter sw = new StringWriter();
-            mapper.writeValue(sw, data);
-            return sw.toString();
-        } catch (IOException e){
-            throw new RuntimeException("IOException from a StringWriter?");
-        }
-    }*/
 
 }

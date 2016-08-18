@@ -17,22 +17,26 @@ Java Spark Rest API example with Retrofit/Lombok and OkHttp as request cache
 - retrofit - Used to consume daw-api
 - converter-gson - Used by retrofit for serializing objects
 
-#### Usage
-- Application's default port is 8000.
-Can be changed by editing ```LISTEN_PORT``` in [Xdaw.java](https://github.com/keremgocen/fun-with-spark/blob/cache-dev/xdaw/src/main/java/Xdaw.java)
+#### config.properties file
 
-- DAW-API is assumed to be running on ```http://localhost:8080/api/```.
-This behavior can be changed by modifying ```TARGET_URL_BASE``` constant in [ExtApi.java](https://github.com/keremgocen/fun-with-spark/blob/cache-dev/xdaw/src/main/java/ExtApi.java) file.
+Settings below can be mofidied in ```config.properties``` file.
+
+##### Target url for daw-api
+>external.base.url = http://74.50.59.155:6000/api/
+
+##### Port setting for this app
+>internal.listen.port = 8000
+
+##### Response cache eviction time (seconds)
+>cachecontrol.maxage = 120
 
 #### Response Caching
-Response caching is achieved via OkHttp client and response headers from daw-api. Cache duration can be modified via "max-age=" parameter. 
-
-> "max-age=60" # evict responses after 60 seconds
+Response caching is achieved via OkHttp client interception incoming responses from external daw-api. 
 
 See [Caching in HTTP](https://www.w3.org/Protocols/rfc2616/rfc2616-sec13.html) for more info.
 
 ### Complementary DAW-API
-You can run it either locally(as assumed by default) or use the external version.
+You can run it either locally or use the external version(default).
 
 ### API Reference
 
@@ -56,46 +60,7 @@ You can run it either locally(as assumed by default) or use the external version
       "Frida_Welch39"
     ]
   },
-  {
-    "id": 602508,
-    "face": "t(-.-t)",
-    "size": 36,
-    "price": 3,
-    "recent": [
-      "Misael_Hilpert",
-      "Kathleen.Upton22",
-      "Novella94",
-      "Frida_Welch39"
-    ]
-  },
-  {
-    "id": 569294,
-    "face": "◕‿↼",
-    "size": 38,
-    "price": 1078,
-    "recent": [
-      "Novella94",
-      "Frida_Welch39"
-    ]
-  },
-  {
-    "id": 569294,
-    "face": "◕‿↼",
-    "size": 38,
-    "price": 1078,
-    "recent": [
-      "Novella94",
-      "Frida_Welch39"
-    ]
-  },
-  {
-    "id": 827648,
-    "face": "ง ͠° ل͜ °)ง",
-    "size": 12,
-    "price": 281,
-    "recent": [
-      "Novella94"
-    ]
-  }
+  .
+  .
 ]
 ```
