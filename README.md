@@ -31,7 +31,7 @@ Settings below can be mofidied in ```config.properties``` file.
 >cachecontrol.maxage = 120
 
 #### Response Caching
-Response caching is achieved via OkHttp client interception incoming responses from external daw-api. 
+Response caching is achieved through Retrofit/OkHttp client and by intercepting incoming responses from external daw-api. 
 
 See [Caching in HTTP](https://www.w3.org/Protocols/rfc2616/rfc2616-sec13.html) for more info.
 
