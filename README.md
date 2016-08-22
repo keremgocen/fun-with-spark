@@ -34,7 +34,7 @@ Java Spark Rest API example with Retrofit/Lombok and OkHttp as request cache
 
 #### Usage
 
-curl localhost:4567/api/recent_purchases/:username
+> curl localhost:4567/api/recent_purchases/:username
 
 #### Build
 (only if you changed something and want to get a new image)
