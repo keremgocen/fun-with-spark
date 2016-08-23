@@ -14,6 +14,7 @@ Java Spark Rest API example with Retrofit/Lombok and OkHttp as request cache
 #### Compile and generate executable JAR with dependencies
 
 > mvn package
+
 > java -jar target/app-1.0-SNAPSHOT-jar-with-dependencies.jar
 
 #### Usage
