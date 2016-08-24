@@ -1,4 +1,4 @@
-/**
+package cmd; /**
  * Created by kerem on 8/15/16.
  */
 
@@ -13,6 +13,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import util.AppSettings;
+import util.ExtApi;
 import util.JsonTransformer;
 
 import java.io.File;
@@ -21,7 +22,7 @@ import java.util.HashSet;
 import static spark.Spark.get;
 import static spark.Spark.port;
 
-public class Xdaw {
+public class App {
 
     private static final int HTTP_BAD_REQUEST = 400;
     private static final int USERS_GET_LIMIT = 10;
