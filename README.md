@@ -29,24 +29,29 @@ Java Spark Rest API example with Retrofit/Lombok and OkHttp as request cache
 
 > docker pull keremgocen/fun-with-spark
 
-#### Run
+
+#### Run
 
 > docker run -d -p 4567:8000 keremgocen/fws
+
 
 #### Usage
 
 > curl localhost:4567/api/recent_purchases/:username
+
 
 #### Build
 (only if you changed something and want to get a new image)
 
 > docker build -t <tag> .
 
+
 ### Compile/Run via IntelliJ
 - [IntelliJ Community Edition](https://www.jetbrains.com/idea/download/)
  - Tested on version 2016.2.12
 - Go to "File->Open" and choose "app" folder in this repository to open the IntelliJ project
 - Build & Run as a Maven project
+
  
 #### Maven Dependencies
 
@@ -55,6 +60,7 @@ Java Spark Rest API example with Retrofit/Lombok and OkHttp as request cache
 - lombok - Automated boilerplate getter/setters for objects
 - retrofit - Used to consume daw-api
 - converter-gson - Used by retrofit for serializing objects
+
 
 ### config.properties file
 
